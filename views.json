@@ -1,13 +1,40 @@
 [
   {
     "name": "week",
-    "title": "This week",
-    "subtitle": "Marketing Attribution for Claude Code: what needs attention, rendered by npm run view",
+    "title": "Weekly attribution review",
+    "subtitle": "Private snapshot. Credit allocation does not prove causal lift.",
+    "sections": [
+      {
+        "title": "Channel credit",
+        "sql": "SELECT channel,currency,sum(linear_cents)::bigint AS credited_cents FROM attribution_credit GROUP BY channel,currency ORDER BY currency,channel"
+      },
+      {
+        "title": "Won deals without eligible evidence",
+        "sql": "SELECT * FROM unattributed ORDER BY code"
+      }
+    ]
+  },
+  {
+    "name": "follow-ups",
+    "title": "Evidence and follow-ups",
     "sections": [
       {
         "title": "Needs attention",
-        "note": "TODO(author): point this at the industry's attention view (overdue, stuck, quiet).",
-        "sql": "select 'replace me' as item, 'TODO(author)' as why"
+        "sql": "SELECT * FROM attention ORDER BY reason,record"
+      },
+      {
+        "title": "Privacy review",
+        "sql": "SELECT * FROM compliance_findings ORDER BY rule,record"
+      }
+    ]
+  },
+  {
+    "name": "models",
+    "title": "Compare attribution models",
+    "sections": [
+      {
+        "title": "First, last and linear credit",
+        "sql": "SELECT channel,currency,sum(first_cents)::bigint AS first_cents,sum(last_cents)::bigint AS last_cents,sum(linear_cents)::bigint AS linear_cents FROM attribution_credit GROUP BY channel,currency ORDER BY currency,channel"
       }
     ]
   }

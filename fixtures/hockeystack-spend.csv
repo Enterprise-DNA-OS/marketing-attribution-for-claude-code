@@ -1,0 +1,2 @@
+date,unique_id,network,account_id,campaign_id,campaign_name,adgroup_id,adgroup_name,ad_id,ad_name,cost,impressions,clicks,currency,utm_source,utm_medium,utm_campaign,utm_term,utm_content,keyword
+2026-10-01,hs-spend-1,LinkedIn,acct-demo,camp-demo,Demo campaign,,,,,250.25,1000,15,NZD,linkedin,paid,demo,,,

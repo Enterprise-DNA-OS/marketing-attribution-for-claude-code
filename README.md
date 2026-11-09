@@ -1,115 +1,85 @@
-<h1 align="center">Marketing Attribution for Claude Code</h1>
+# Marketing Attribution for Claude Code
 
-<p align="center">
-  <strong>The open-source marketing attribution system that is just a database and Claude Code.</strong>
-</p>
+Explain which recorded marketing touches receive credit for won deals. Keep the evidence, the rules and the follow-up work in a database you own.
 
-<p align="center">
-  Created by <a href="https://www.enterprisedna.co"><strong>Enterprise DNA</strong></a>. Free and open source. Works with Claude Code, Codex, OpenCode or Cursor.
-</p>
+| Do it yourself | We customise it | We run it for you |
+|---|---|---|
+| Free, MIT. Install and run the demo. | Your fields, attribution rules, export mapping and connections. | Installed and operated through Omni by Enterprise DNA. One setup fee, then a retainer. |
 
-<!-- three-doors -->
-<table align="center">
-  <tr>
-    <td align="center"><strong>Do it yourself</strong><br/>Clone it, run it, own it. Free, MIT.<br/><a href="#quick-start">Quick start</a></td>
-    <td align="center"><strong>We customise it</strong><br/>Your fields, your rules, your HockeyStack data brought across.<br/><a href="https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=hockeystack">Book a call</a></td>
-    <td align="center"><strong>We run it for you</strong><br/>Installed, connected and operated inside Omni. Setup fee, then a retainer.<br/><a href="https://enterprisedna.co/omni/instead-of/hockeystack?utm_source=github&utm_medium=readme&utm_campaign=hockeystack">How it works</a></td>
-  </tr>
-</table>
+[Get your version built](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=hockeystack) · [Instead of HockeyStack](https://enterprisedna.co/omni/instead-of/hockeystack?utm_source=github&utm_medium=readme&utm_campaign=hockeystack)
 
-<p align="center">
-  <a href="#what-is-this">What is this</a> &bull;
-  <a href="#why-no-front-end">Why no front end</a> &bull;
-  <a href="#quick-start">Quick start</a> &bull;
-  <a href="#the-commands">Commands</a> &bull;
-  <a href="#instead-of-hockeystack">Instead of HockeyStack</a> &bull;
-  <a href="#want-it-installed-and-run-for-you">Installed for you</a> &bull;
-  <a href="#license">License</a>
-</p>
+## Start with the Monday review
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Node-20+-339933?style=flat-square" alt="Node 20+" />
-  <img src="https://img.shields.io/badge/PostgreSQL-any-336791?style=flat-square" alt="PostgreSQL" />
-  <img src="https://img.shields.io/badge/PGlite-embedded-3ecf8e?style=flat-square" alt="PGlite" />
-  <img src="https://img.shields.io/badge/License-MIT-yellow?style=flat-square" alt="MIT License" />
-</p>
-
----
-
-## What is this
-
-Marketing Attribution for Claude Code does the job you pay HockeyStack for, as a Postgres database and a set of agent commands. There is no web front end. You open the folder in [Claude Code](https://claude.com/claude-code) (or Codex, OpenCode, Cursor: see `AGENTS.md`) and ask for what you want in plain language. It runs the right query, and it can answer questions the HockeyStack dashboard cannot.
-
-<!-- TODO(author): the annual bill. One sentence: what a 10 to 50 person business typically pays HockeyStack per year, all in, with a source. -->
-
-Want the same thing with a web front end, or built on a different stack? That is a customisation, and it is exactly what Enterprise DNA does: [book a call](https://enterprisedna.co/omni/book/?utm_source=github&utm_medium=readme&utm_campaign=hockeystack).
-
-<!-- TODO(author): two or three sentences on what this specific product covers and who it is for. -->
-
-## Why no front end
-
-- The front end was only ever there because the database was hard to talk to. That is no longer true.
-- Your data sits in plain Postgres tables you own. Any tool can read them. No export, no lock-in.
-- No seats, no tiers, no add-ons. Read [docs/why-no-front-end.md](docs/why-no-front-end.md) for the honest trade-offs too.
-
-## Quick start
-
-Sixty seconds, no database install (an embedded Postgres runs inside Node):
+Node 20 or later:
 
 ```bash
-git clone https://github.com/Enterprise-DNA-OS/marketing-attribution-for-claude-code.git
-cd marketing-attribution-for-claude-code
 npm install
 npm run demo
+npm run attribution -- weekly-review
+npm run view
+npm run docs
 ```
 
-Then open the folder in Claude Code and type a slash command. <!-- TODO(author): name the first command to try. -->
+Open the folder in Claude Code, Codex, OpenCode or Cursor. AGENTS.md and CLAUDE.md point every runtime at the same commands. PGlite works locally; DATABASE_URL selects PostgreSQL. The demo is fictional and includes an unverified event, an overdue retention review, overdue work and a won deal without eligible evidence. Dates are relative to today. Seeding twice leaves existing records intact. Never seed a working database.
 
-### Use it with your own Postgres or Supabase
+## Weekly rituals
 
-Copy `.env.example` to `.env`, set `DATABASE_URL`, then `npm run migrate`. Same commands, shared data, no per-seat fee.
+/channel-credit, /model-comparison, /spend-review, /unattributed and /weekly-review are the marketing desk. /journey shows buyer evidence. /attention and /owner-load give work to the right person. /compliance checks privacy review fields against cited rules. /draft-review and /draft-privacy create private paperwork and never send it.
 
-## The commands
+26 CLI commands and 30 slash-command recipes. Every CLI command accepts --json. Changes require --actor and support --dry-run. Codes, partial ids and case-insensitive name matching work; ambiguous names list candidates and exit 1.
 
-<!-- TODO(author): a table of the slash commands in .claude/commands and what each one does. -->
+## What the numbers mean
 
-| Command | What it does |
-|---|---|
-| `/...` | ... |
+Only won deals receive credit. Eligible events are verified, within the deal's inclusive lookback window, on or before its close date, within their retention-review period, and attached to an account with a current purpose review. A deal-specific event must match the deal code. Blank deal codes allow account-level association.
 
-## Instead of HockeyStack
+First and last touch allocate the whole deal to one event. Linear divides integer cents equally and distributes remainder cents in date/id order. All three reconcile exactly to each attributable deal. Multiple currencies never merge. Unattributed revenue stays visible. Spend review compares period spend with period won-deal credit, not causal return on investment. [Limits and operating policy](docs/operations.md).
 
-<!-- TODO(author): how to bring data across from HockeyStack; link docs/replace-hockeystack.md -->
+## Ten questions you can answer today
 
-## Architecture
+These are demonstrated questions, not unverified claims that the incumbent cannot answer them.
 
+1. Which won deals have no eligible touchpoints? Run `unattributed`.
+2. How does channel credit change between first, last and linear models? Run `model-comparison`.
+3. Which channels have spend but no credited wins? Run `spend-review`.
+4. Which overdue review is keeping an account out of attribution? Run `compliance`.
+5. Which buyer events happened after the recorded close date? Run `journey AC-01`.
+6. Which owner has overdue follow-up work? Run `owner-load`.
+7. Which imported events still need an accuracy check? Run `attention`.
+8. What revenue credit belongs to each currency? Run `channel-credit`.
+9. How many records arrived in each import batch? Run `import-health`.
+10. Who recorded an evidence review and what did they check? Run `activity`.
+
+## Bring your history
+
+```bash
+npm run attribution -- import hockeystack --kind=stage --file=fixtures/hockeystack-stage.csv --mapping=fixtures/touchpoints.json --source=demo-export --retention-due=2027-01-31 --actor="Your name" --dry-run
 ```
-marketing-attribution-for-claude-code/
-  CLAUDE.md                 how the operator wants this run (routing table + house rules)
-  AGENTS.md                 the same, for Codex / OpenCode / Cursor / Gemini CLI
-  .claude/commands/         the slash commands
-  scripts/                  the CLI the commands drive
-  scripts/lib/db.mjs        one adapter: DATABASE_URL (pg) or embedded PGlite
-  supabase/migrations/      plain SQL schema
-  supabase/seed.sql         demo data
-  docs/                     the thesis and the migration guide
-```
 
-## Built for coding agents
+Replace the fixture with a Stage Data export delivered to your warehouse and saved as CSV. Map your dynamic touchpoint columns explicitly. Spend Data has a separate one-command import. Stage exports do not provide a complete deal value ledger: reconcile and add outcomes separately. Imported evidence stays unverified until reviewed. [Exact mapping and switch guide](docs/replace-hockeystack.md).
 
-The database, CLI and command recipes work with Claude Code, Codex, OpenCode or Cursor. Ask your coding agent for a new command and have it implement and test the change against the same records.
+## Documents and views
 
-## Contributing
+Edit brand.json once. npm run docs produces account evidence reviews and deal credit reconciliations. npm run view creates weekly, model and follow-up snapshots. /new-view adds a read-only report. /customise adds a tested migration and your own rules. [Privacy rules and their sources](docs/compliance.md).
 
-Issues and pull requests are welcome. Keep the shape: plain SQL, a small CLI, a slash command per recurring job, no front end.
+## Your first hour: ten things to ask for
 
-## Want it installed and run for you?
+1. Put our name and colours on the review.
+2. Show the demo deal without evidence.
+3. Compare the three models.
+4. Explain the remainder cent.
+5. Show spend separately for each currency.
+6. Preview our Stage Data export.
+7. Map our actual touchpoint columns.
+8. Record our purpose and retention-review policy.
+9. Draft this week's review with the overdue owner.
+10. Add a tested business-unit field and a view grouped by it.
 
-Enterprise DNA installs Marketing Attribution for Claude Code for your business, migrates your HockeyStack data, connects it to the rest of your tools, and runs it for you as part of **Omni**, our managed Command Center. One setup fee, then a monthly retainer.
+## Verification and scope
 
-- Book a call: [enterprisedna.co/omni/book](https://enterprisedna.co/omni/book/?offer=replace-software&utm_source=github&utm_medium=readme&utm_campaign=hockeystack)
-- Read more: [enterprisedna.co/omni/instead-of/hockeystack](https://enterprisedna.co/omni/instead-of/hockeystack?utm_source=github&utm_medium=readme&utm_campaign=hockeystack)
+npm test uses an isolated database and checks arithmetic, lookback boundaries, missing evidence, currency separation, import rollback and idempotency, ambiguity, audit, exports and escaped documents. CI runs on Windows and Linux, plus PostgreSQL. A configured workflow is not evidence it has completed.
 
-## License
+No browser tracker, identity stitching, live CRM connection, ad activation, predictive model or causal lift measurement ships in this base. [Why there is no front end](docs/why-no-front-end.md). Enterprise DNA builds the connections and shared screens your business needs and runs your version through Omni by Enterprise DNA, for one setup fee then a retainer.
 
-MIT. Copyright (c) 2026 Enterprise DNA.
+HockeyStack Self-Serve lists $1,250 per month on its [vendor page](https://www.hockeystack.com/smb), checked 9 November 2026. Twelve payments total $15,000, a list-price calculation rather than a customer invoice. [Selection evidence](docs/research.md).
+
+MIT. Not affiliated with HockeyStack or Anthropic. Hosting and agent usage have their own costs.

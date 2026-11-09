@@ -1,11 +1,45 @@
 [
   {
-    "name": "example",
-    "title": "TODO(author): the first document this industry must produce",
-    "for_each": "select gen_random_uuid() as id, 'Example' as name",
-    "file": "name",
+    "name": "account-review",
+    "title": "Account attribution evidence review",
+    "for_each": "SELECT id,code FROM accounts ORDER BY code",
+    "file": "code",
     "sections": [
-      { "title": "Details", "sql": "select 'replace me' as item, $1::text as record_id" }
+      {
+        "title": "Account purpose and ownership",
+        "layout": "record",
+        "sql": "SELECT code,name,owner,purpose,review_due FROM accounts WHERE id=$1"
+      },
+      {
+        "title": "Deals",
+        "sql": "SELECT code,name,status,currency,amount_cents,closed_on FROM deals WHERE account_id=$1 ORDER BY code"
+      },
+      {
+        "title": "Journey evidence",
+        "sql": "SELECT external_id,occurred_on,channel,verified,retention_due FROM touches WHERE account_id=$1 ORDER BY occurred_on,external_id"
+      },
+      {
+        "title": "Follow-ups",
+        "sql": "SELECT code,name,owner,due_on,status FROM actions WHERE account_id=$1 ORDER BY code"
+      }
+    ]
+  },
+  {
+    "name": "deal-credit",
+    "title": "Deal credit reconciliation",
+    "for_each": "SELECT id,code FROM deals WHERE status='won' ORDER BY code",
+    "file": "code",
+    "sections": [
+      {
+        "title": "Recorded outcome",
+        "layout": "record",
+        "sql": "SELECT code,name,currency,amount_cents,closed_on,lookback_days FROM deals WHERE id=$1"
+      },
+      {
+        "title": "Eligible credit allocation",
+        "note": "An empty result means unallocated revenue, not zero revenue. These models allocate credit; they do not establish causality.",
+        "sql": "SELECT channel,occurred_on,currency,first_cents,last_cents,linear_cents FROM attribution_credit WHERE deal_id=$1 ORDER BY ordinal"
+      }
     ]
   }
 ]

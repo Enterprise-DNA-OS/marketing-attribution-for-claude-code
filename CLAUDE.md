@@ -1,43 +1,47 @@
-# Marketing Attribution for Claude Code: operating instructions
+# Marketing Attribution for Claude Code
 
-This file is the brain. Claude Code reads it at the start of every session. It says who this is for, how work gets done, and the one right way to do each recurring job.
+This is an owned evidence desk for a marketing operator. Fill in your business and owner in brand.json. Claude Code, Codex, OpenCode and Cursor use the same scripts and command recipes.
 
-## Who this is for
+Every answer starts with a CLI read. Never claim a model proves causality, silently combine currencies, infer consent from a visit, or invent vendor limitations.
 
-- **Business:** [YOUR BUSINESS]
-- **Operator:** [YOUR NAME], [your role]
-- **What matters most:** [the one or two outcomes you care about]
+## One route per recurring job
 
-Fill this in once. A worker with context knows. A worker without it guesses.
+- Account review: `/accounts`.
+- Recorded deals: `/deals`.
+- Buyer journey: `/journey`.
+- Weekly channel credit: `/channel-credit`.
+- Compare first, last and linear credit: `/model-comparison`.
+- Reconcile spend against credit: `/spend-review`.
+- Find won deals without evidence: `/unattributed`.
+- Find overdue work and unverified events: `/attention`.
+- Review privacy evidence: `/compliance`.
+- Follow-up list: `/actions`.
+- Review owner workload: `/owner-load`.
+- Check import batches: `/import-health`.
+- Read the change record: `/activity`.
+- Monday attribution review: `/weekly-review`.
+- Record an account: `/add-account`.
+- Record an outcome: `/add-deal`.
+- Record a touchpoint: `/log-touch`.
+- Assign follow-up work: `/add-action`.
+- Close a follow-up: `/close-action`.
+- Review purpose and owner: `/review-account`.
+- Verify event evidence: `/verify-touch`.
+- Bring HockeyStack evidence across: `/import`.
+- Export portable records: `/export`.
+- Draft the weekly review: `/draft-review`.
+- Draft a privacy evidence review: `/draft-privacy`.
+- List available commands: `/help`.
+- Brand paperwork: `/docs` and `/view`.
+- Change the model: `/customise`.
+- Add a read-only report: `/new-view`.
 
-## How to work
+## House rules
 
-1. **Take a brief, not a script.** The operator describes the outcome. You run the right command and present the answer.
-2. **Read before you write.** Before drafting anything about a record, read its full history first.
-3. **Plain language.** Short sentences. No filler. Numbers in tables.
-4. **Silent success, loud problems.** No play-by-play. Say what broke and what you did about it.
-5. **Stop at the line.** Anything that sends, deletes, or faces a customer waits for a yes in this session.
+Run `npm run attribution -- help` for the CLI. Every command accepts --json. Mutations require --actor and support --dry-run. Imported events are unverified and imported accounts have no approved purpose. Run review-account and verify-touch with real evidence before using them in attribution. A recorded name is not authenticated identity.
 
-## Routing table: one right way for each recurring job
+Never send, publish, delete or call an ad platform from here. Drafts remain in drafts/. Do not seed a working database. Keep real imports in imports/, exports in exports/, and credentials out of git. DATABASE_URL selects PostgreSQL; otherwise PGlite uses .data/db. All database roles are for a trusted operator, not exposed to browsers.
 
-| When the operator asks for... | Use this |
-|---|---|
-| <!-- TODO(author): one row per slash command --> | `/...` |
+Read docs/compliance.md for sourced review prompts, docs/replace-hockeystack.md for the import contract and docs/operations.md for backups. Read .claude/commands/<job>.md for a recurring job. Add migrations for customisation, never edit applied history.
 
-If an ask fits nothing here, run the CLI directly (`npm run <cli> -- --help`) and then propose a new command for it.
-
-## Hard rules
-
-- Never send email or messages from here. Draft to `drafts/`, a person sends.
-- Never delete records without an explicit yes in this session. Prefer marking closed or archived.
-- Never invent a record. If a name is ambiguous, list the candidates and ask.
-- The database is the source of truth. If the answer is not in it, say so.
-
-## Where things live
-
-- `scripts/` the CLI. `scripts/lib/db.mjs` picks `DATABASE_URL` (Postgres, Supabase) or the embedded database in `.data/`.
-- `supabase/migrations/` the schema, plain SQL. `npm run migrate` applies it.
-- `.claude/commands/` the slash commands. Add one every time the same ask comes twice.
-- `docs/` the thesis and the guide for moving off HockeyStack.
-
-Built by Enterprise DNA. Installed and run for you as part of Omni: https://enterprisedna.co/omni/instead-of/hockeystack
+Built and run for you through Omni by Enterprise DNA: https://enterprisedna.co/omni/book/?offer=replace-software&utm_campaign=hockeystack
