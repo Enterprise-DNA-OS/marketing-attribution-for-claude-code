@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { getDb } from './lib/db.mjs';
 import { parseCsv, pick } from './lib/csv.mjs';
 import { page, table, writeOut } from './lib/render.mjs';
+import { table as textTable } from './lib/format.mjs';
 
 export const COMMANDS = ['help','accounts','deals','journey','channel-credit','model-comparison','spend-review','unattributed','attention','compliance','actions','owner-load','import-health','activity','weekly-review','add-account','add-deal','log-touch','add-action','close-action','review-account','verify-touch','import','export','draft-review','draft-privacy'];
 const READS = {
@@ -145,7 +146,15 @@ export async function run(db,args) {
  } catch(error) {await db.exec('ROLLBACK');throw error;}
 }
 export function human(v) {
- if(Array.isArray(v)) {if(!v.length)return 'Nothing here.';const cols=Object.keys(v[0]);const cell=x=>x===null?'unknown':typeof x==='object'?JSON.stringify(x):String(x);return [cols.join(' | '),...v.map(r=>cols.map(c=>cell(r[c])).join(' | '))].join('\n');}
+ if(Array.isArray(v)) {
+  if(!v.length)return 'Nothing here.';
+  if(typeof v[0]!=='object')return v.join('\n');
+  return textTable(v,Object.keys(v[0]).map(key=>({key,label:key.replace(/_cents$/, '').replaceAll('_',' '),format:(value,row)=>{
+   if(value===null)return 'unknown';
+   if(key.endsWith('_cents'))return `${row.currency||''} ${(Number(value)/100).toFixed(2)}`.trim();
+   return typeof value==='object'?JSON.stringify(value):String(value).replace(/\s+/g,' ');
+  }})));
+ }
  return Object.entries(v).map(([k,x])=>`${k}:\n${Array.isArray(x)?human(x):typeof x==='object'?JSON.stringify(x,null,2):x}`).join('\n\n');
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(path.resolve(process.argv[1])).href) {

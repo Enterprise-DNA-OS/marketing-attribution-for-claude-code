@@ -85,6 +85,7 @@ try {
  equal(JSON.parse(cli(['scripts/attribution.mjs','accounts','--json']).stdout).length,5);
  ok(cli(['scripts/attribution.mjs','journey','Harbour','--json'],1).stderr.includes('Ambiguous'));
  ok(cli(['scripts/attribution.mjs','bad-command'],1).stderr.includes('Unknown command'));
+ const humanOutput=cli(['scripts/attribution.mjs','model-comparison']).stdout;ok(humanOutput.includes('NZD 12000.01'));ok(/-{2,}  -{2,}/.test(humanOutput));
  cli(['scripts/view.mjs']);cli(['scripts/docs.mjs']);
  ok(fs.readFileSync(path.join(temp,'views','week.html'),'utf8').includes('Weekly attribution'));
  ok(fs.readdirSync(path.join(temp,'docs-out','deal-credit')).length>=3);
